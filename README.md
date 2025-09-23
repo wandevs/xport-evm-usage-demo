@@ -397,6 +397,7 @@ curl -XGET https://testnet.wanscan.org/api/cc/msg/tx\?sendTxHash\=0xd30fca67bb23
 
 If you can see the status is Success, it means the cross-chain message has been successfully processed.
 
+Wait until the status is Success before proceeding to the next step.
 
 ### Step 7: Approve TokenHome to Use Tokens
 Authorize the TokenHome contract to transfer your tokens.
@@ -519,6 +520,8 @@ curl -XGET https://testnet.wanscan.org/api/cc/msg/tx\?sendTxHash\=0x4f7280c5bdf4
 ]
 ```
 
+Wait until the status is Success before proceeding to the next step.
+
 ### Step 10: Check Destination Chain Token Balance
 Confirm tokens have successfully arrived on the destination chain.
 
@@ -617,6 +620,8 @@ curl -XGET https://testnet.wanscan.org/api/cc/msg/tx\?sendTxHash\=0xff701b99ea1f
   }
 ]
 ```
+
+Wait until the status is Success before proceeding to the next step.
 
 ### Step 13: Check Source Chain Token Balance
 Confirm tokens have successfully returned to the source chain.
