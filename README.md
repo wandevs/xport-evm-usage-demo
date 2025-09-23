@@ -23,11 +23,11 @@ cast --version
 ### 2. Clone the Repository
 
 ```bash
-git clone <repository_url>
+git clone https://github.com/wandevs/xport-evm-usage-demo.git
 cd xport-evm-usage-demo
 ```
 
-> Note: Replace `<repository_url>` with the actual repository address
+> Note: Replace `https://github.com/wandevs/xport-evm-usage-demo.git` with the actual repository address
 
 ### 3. Install Dependencies
 
