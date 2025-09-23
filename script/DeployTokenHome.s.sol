@@ -11,7 +11,7 @@ contract DeployTokenHome is Script {
         address wmbGateway = 0xDDddd58428706FEdD013b3A761c6E40723a7911d; // Testnet
         // address wmbGateway = 0x7280E3b8c686c68207aCb1A4D656b2FC8079c033; // Mainnet
 
-        address token = 0x40E73F350A2245717B5c7D15845D926e8aE3041E;
+        address token = 0x6BFAf71e3170f3Ae9129810262C2d189128c795f;
 
         vm.startBroadcast();
 
