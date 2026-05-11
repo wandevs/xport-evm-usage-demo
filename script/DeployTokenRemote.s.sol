@@ -8,15 +8,13 @@ import {console} from "forge-std/console.sol";
 contract DeployTokenRemote is Script {
     function run() public {
 
-        address wmbGateway = 0xDDddd58428706FEdD013b3A761c6E40723a7911d; // Testnet
-        // address wmbGateway = 0x7280E3b8c686c68207aCb1A4D656b2FC8079c033; // Mainnet
+        address wmbGateway = vm.envOr("WMB_GATEWAY", address(0xDDddd58428706FEdD013b3A761c6E40723a7911d)); // Testnet
+        address _remoteSc = vm.envAddress("TOKEN_HOME_ADDRESS"); // Token Home address on source chain
+        uint256 _remoteChainId = vm.envUint("SOURCE_XPORT_CHAIN_ID"); // source chain id
+        string memory _name = vm.envOr("REMOTE_TOKEN_NAME", string("Wrapped Test Token"));
+        string memory _symbol = vm.envOr("REMOTE_TOKEN_SYMBOL", string("WTT"));
 
-        address _remoteSc = 0xc75DFEBF42e2ca4f9F9b90F980B7a484946f94b5; // Token Home address on source chain
-        uint256 _remoteChainId = 2153201998; // source chain id
-        string memory _name = "Wrapped Test Token"; 
-        string memory _symbol = "WTT";
-
-        uint256 initFee = 0.01 ether; // the message bridge fee for the first initial tx.
+        uint256 initFee = vm.envOr("REMOTE_INIT_FEE", uint256(0.01 ether)); // message bridge fee for the first initial tx
 
         vm.startBroadcast();
 

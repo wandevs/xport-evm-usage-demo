@@ -69,6 +69,46 @@ Other EVM-compatible chains have no special requirements; configure according to
 
 ## Step-by-Step Guide
 
+## One-Command Full Flow
+
+If you want to run the whole demo without manually editing Solidity deployment scripts or copying addresses between steps, use:
+
+```bash
+scripts/run-full-flow.sh \
+  --source-rpc https://gwan-ssl.wandevs.org:46891 \
+  --dest-rpc https://ethereum-sepolia-rpc.publicnode.com \
+  --wallet YOUR_WALLET_ADDRESS \
+  --private-key YOUR_PRIVATE_KEY
+```
+
+The script automatically:
+
+- builds contracts
+- deploys MockERC20 on the source chain
+- mints test tokens
+- deploys TokenHome on the source chain
+- deploys TokenRemote on the destination chain
+- waits for XPort cross-chain messages to become `Success`
+- approves and transfers tokens to the destination chain
+- optionally transfers tokens back to the source chain
+- prints deployed addresses, transaction hashes, fees, and balances
+
+Useful optional parameters:
+
+```bash
+scripts/run-full-flow.sh \
+  --source-rpc SOURCE_RPC \
+  --dest-rpc DEST_RPC \
+  --wallet YOUR_WALLET_ADDRESS \
+  --private-key YOUR_PRIVATE_KEY \
+  --mint-amount 100ether \
+  --transfer-amount 10ether \
+  --skip-cross-back
+```
+
+Run `scripts/run-full-flow.sh --help` to see all options, including custom WMB gateway, XPort chain IDs, gas settings, polling timeout, and token name/symbol.
+By default, the script uses the testnet WMB gateway `0xDDddd58428706FEdD013b3A761c6E40723a7911d` and reads each chain's XPort BIP44 chain ID from `chainId()` on that gateway.
+
 The following 14 steps will guide you through the complete cross-chain token transfer process. Each step depends on the output of the previous step, so please execute in strict order and update the corresponding variables in deployment scripts promptly.
 
 ### Step 1: Deploy Mock Token (Source Chain)
