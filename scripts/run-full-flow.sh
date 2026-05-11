@@ -14,8 +14,8 @@ TRANSFER_AMOUNT="10ether"
 REMOTE_TOKEN_NAME="Wrapped Test Token"
 REMOTE_TOKEN_SYMBOL="WTT"
 REMOTE_INIT_FEE=""
-SOURCE_LEGACY="true"
-SOURCE_GAS_PRICE="4000000000"
+SOURCE_LEGACY="false"
+SOURCE_GAS_PRICE=""
 DEST_LEGACY="false"
 DEST_GAS_PRICE=""
 GAS_LIMIT="400000"
@@ -48,8 +48,8 @@ Optional defaults match the README testnet example:
   --remote-name             Wrapped token name, default: Wrapped Test Token
   --remote-symbol           Wrapped token symbol, default: WTT
   --remote-init-fee         Initial remote deployment fee in wei. If omitted, the script estimates it.
-  --source-legacy           true/false, default: true
-  --source-gas-price        Source gas price in wei, default: 4000000000
+  --source-legacy           true/false, default: false
+  --source-gas-price        Source gas price in wei, optional
   --dest-legacy             true/false, default: false
   --dest-gas-price          Destination gas price in wei, optional
   --status-api              Cross-chain status API, default: https://testnet.wanscan.org/api/cc/msg/tx

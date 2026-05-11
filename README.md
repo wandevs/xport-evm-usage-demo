@@ -108,6 +108,7 @@ scripts/run-full-flow.sh \
 
 Run `scripts/run-full-flow.sh --help` to see all options, including custom WMB gateway, XPort chain IDs, gas settings, polling timeout, and token name/symbol.
 By default, the script uses the testnet WMB gateway `0xDDddd58428706FEdD013b3A761c6E40723a7911d` and reads each chain's XPort BIP44 chain ID from `chainId()` on that gateway.
+It does not force `--legacy` or a fixed gas price; Foundry estimates gas by default. You can still pass `--source-legacy true` or `--source-gas-price` if a specific chain requires manual gas settings.
 
 The following 14 steps will guide you through the complete cross-chain token transfer process. Each step depends on the output of the previous step, so please execute in strict order and update the corresponding variables in deployment scripts promptly.
 
