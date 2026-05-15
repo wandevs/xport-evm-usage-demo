@@ -20,7 +20,7 @@ DEST_LEGACY="false"
 DEST_GAS_PRICE=""
 GAS_LIMIT="400000"
 STATUS_API="https://testnet.wanscan.org/api/cc/msg/tx"
-STATUS_TIMEOUT="900"
+STATUS_TIMEOUT="3600"
 STATUS_INTERVAL="15"
 SKIP_CROSS_BACK="false"
 
@@ -53,7 +53,7 @@ Optional defaults match the README testnet example:
   --dest-legacy             true/false, default: false
   --dest-gas-price          Destination gas price in wei, optional
   --status-api              Cross-chain status API, default: https://testnet.wanscan.org/api/cc/msg/tx
-  --status-timeout          Status wait timeout seconds, default: 900
+  --status-timeout          Status wait timeout seconds, default: 3600
   --status-interval         Poll interval seconds, default: 15
   --skip-cross-back         Skip destination-to-source return flow
 
