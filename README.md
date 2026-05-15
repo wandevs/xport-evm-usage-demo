@@ -84,19 +84,16 @@ Run `scripts/run-full-flow.sh --help` for all flags (custom gateway, XPort chain
 
 ## 3. Network configuration
 
-The two main differences across chains are gas semantics and the EVM version.
+The main difference across chains is the EVM version.
 
 | Setting             | Wanchain testnet                         | Wanchain mainnet                         | Avalanche                | Other EVM chains    |
 |---------------------|------------------------------------------|------------------------------------------|--------------------------|---------------------|
-| `forge` extras      | `--legacy --with-gas-price 4000000000`   | `--legacy --with-gas-price 4000000000`   | none                     | usually none        |
-| `cast send` extras  | `--legacy --gas-price 4000000000`        | `--legacy --gas-price 4000000000`        | none                     | usually none        |
 | `evm_version`       | `london`                                 | `london`                                 | `shanghai`               | default             |
 | WMB gateway         | `0xDDddd58428706FEdD013b3A761c6E40723a7911d` | `0x7280E3b8c686c68207aCb1A4D656b2FC8079c033` | same per environment | same per environment |
 | Status API          | `https://testnet.wanscan.org/api/cc/msg/tx` | `https://wanscan.org/api/cc/msg/tx`      | same per environment     | same per environment |
 
 Notes:
 
-- On Wanchain, omitting `--legacy` + a fixed gas price causes transactions to get stuck. EIP-1559 estimation is unreliable there.
 - `evm_version` is set in `foundry.toml`. Pick the lowest version supported across both endpoints — `london` is the safest baseline.
 - The XPort BIP44 chain IDs for each chain live at <https://docs.wanchain.org/products/xport/xport-developer-handbook#id-3.-supported-blockchains>. The full-flow script reads them automatically via `chainId()` on the gateway; for manual deployment you pass them via `SOURCE_XPORT_CHAIN_ID`.
 
@@ -104,7 +101,7 @@ Notes:
 
 ## 4. Manual walkthrough (14 steps)
 
-This mirrors what `run-full-flow.sh` does, but using the deploy scripts and `cast` directly. Every step below assumes Wanchain testnet → Sepolia testnet; adapt the RPC URLs and gas flags per the table above.
+This mirrors what `run-full-flow.sh` does, but using the deploy scripts and `cast` directly. Every step below assumes Wanchain testnet → Sepolia testnet; adapt the RPC URLs per the table above.
 
 Throughout, replace these placeholders with values you collect as you go:
 
@@ -121,7 +118,7 @@ Throughout, replace these placeholders with values you collect as you go:
 forge script script/DeployMockToken.s.sol \
   --rpc-url https://gwan-ssl.wandevs.org:46891 \
   --private-key YOUR_PRIVATE_KEY \
-  --broadcast --legacy --with-gas-price 4000000000
+  --broadcast
 ```
 
 Look for `MockERC20 deployed to: 0x...` in the logs; that's `MOCK_TOKEN_ADDRESS`.
@@ -131,7 +128,7 @@ Look for `MockERC20 deployed to: 0x...` in the logs; that's `MOCK_TOKEN_ADDRESS`
 ```bash
 cast send MOCK_TOKEN_ADDRESS "mint(address,uint256)" YOUR_WALLET_ADDRESS 100ether \
   --rpc-url https://gwan-ssl.wandevs.org:46891 \
-  --private-key YOUR_PRIVATE_KEY --legacy --gas-price 4000000000
+  --private-key YOUR_PRIVATE_KEY
 ```
 
 Expect `status 1 (success)`.
@@ -153,7 +150,7 @@ MOCK_TOKEN_ADDRESS=0x... \
 forge script script/DeployTokenHome.s.sol \
   --rpc-url https://gwan-ssl.wandevs.org:46891 \
   --private-key YOUR_PRIVATE_KEY \
-  --broadcast --legacy --with-gas-price 4000000000
+  --broadcast
 ```
 
 Record `Erc20TokenHome deployed to: 0x...` as `TOKEN_HOME_ADDRESS`.
@@ -199,7 +196,7 @@ A `status` of `Success` means the registration message has been relayed. Do not 
 ```bash
 cast send MOCK_TOKEN_ADDRESS "approve(address,uint256)" TOKEN_HOME_ADDRESS 100ether \
   --rpc-url https://gwan-ssl.wandevs.org:46891 \
-  --private-key YOUR_PRIVATE_KEY --legacy --gas-price 4000000000
+  --private-key YOUR_PRIVATE_KEY
 ```
 
 ### Step 8 — `crossTo`: send tokens to the destination chain
@@ -216,7 +213,7 @@ cast call TOKEN_HOME_ADDRESS "estimateFee(uint256,uint256)(uint256)" DEST_XPORT_
 cast send TOKEN_HOME_ADDRESS "crossTo(address,uint256)" YOUR_WALLET_ADDRESS 10ether \
   --value 114ether \
   --rpc-url https://gwan-ssl.wandevs.org:46891 \
-  --private-key YOUR_PRIVATE_KEY --legacy --gas-price 4000000000
+  --private-key YOUR_PRIVATE_KEY
 ```
 
 ### Step 9 — Wait for the `crossTo` message to arrive
@@ -315,7 +312,6 @@ While the message is in flight the response is `[]`; treat that as pending and k
 
 ## 6. Troubleshooting
 
-- **Transaction pending forever on Wanchain.** You forgot `--legacy` and/or `--gas-price 4000000000`. EIP-1559 fee estimation does not work reliably on Wanchain.
 - **Polling returns `[]` for a long time on mainnet.** You are probably hitting the testnet API. Pass `--status-api https://wanscan.org/api/cc/msg/tx` (or query it manually). The script's default is testnet.
 - **Cross-chain message never reaches `Success`.** Check that (a) TokenHome's wrapper registration completed (step 6) before any `crossTo`, (b) the `--value` you sent covers the latest `estimateFee` result, and (c) the source/destination XPort chain IDs are correct.
 - **Contract deploy fails with EVM-version errors.** Adjust `evm_version` in `foundry.toml` — `london` for Wanchain, `shanghai` for Avalanche.
