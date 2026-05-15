@@ -106,8 +106,20 @@ scripts/run-full-flow.sh \
   --skip-cross-back
 ```
 
+Mainnet example (Plasma → Wanchain mainnet). On mainnet you must pass the mainnet WMB gateway and the mainnet cross-chain status API explicitly:
+
+```bash
+scripts/run-full-flow.sh \
+  --source-rpc https://rpc.plasma.to \
+  --dest-rpc https://gwan-ssl.wandevs.org:56891 \
+  --wallet YOUR_WALLET_ADDRESS \
+  --private-key YOUR_PRIVATE_KEY \
+  --wmb-gateway 0x7280E3b8c686c68207aCb1A4D656b2FC8079c033 \
+  --status-api https://wanscan.org/api/cc/msg/tx
+```
+
 Run `scripts/run-full-flow.sh --help` to see all options, including custom WMB gateway, XPort chain IDs, gas settings, polling timeout, and token name/symbol.
-By default, the script uses the testnet WMB gateway `0xDDddd58428706FEdD013b3A761c6E40723a7911d` and reads each chain's XPort BIP44 chain ID from `chainId()` on that gateway.
+By default, the script uses the testnet WMB gateway `0xDDddd58428706FEdD013b3A761c6E40723a7911d` and the testnet status API `https://testnet.wanscan.org/api/cc/msg/tx`, and reads each chain's XPort BIP44 chain ID from `chainId()` on that gateway. For mainnet, override both with `--wmb-gateway` and `--status-api` as shown above.
 It does not force `--legacy` or a fixed gas price; Foundry estimates gas by default. You can still pass `--source-legacy true` or `--source-gas-price` if a specific chain requires manual gas settings.
 
 The following 14 steps will guide you through the complete cross-chain token transfer process. Each step depends on the output of the previous step, so please execute in strict order and update the corresponding variables in deployment scripts promptly.
